@@ -1,0 +1,115 @@
+<div class="contact-scene-wrap" id="contact-scene"></div>
+
+<script>
+  import * as THREE from 'three';
+
+  const container = document.getElementById('contact-scene');
+  if (!container) throw new Error('No contact scene container');
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.1, 100);
+  camera.position.set(0, 0, 7);
+
+  const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(container.clientWidth, container.clientHeight);
+  renderer.setClearColor(0x000000, 0);
+  container.appendChild(renderer.domElement);
+
+  // Floating torus knot
+  const knotGeom = new THREE.TorusKnotGeometry(1.2, 0.3, 128, 16);
+  const knotMat = new THREE.MeshStandardMaterial({
+    color: '#a855f7',
+    emissive: '#a855f7',
+    emissiveIntensity: 0.3,
+    roughness: 0.2,
+    metalness: 0.5,
+    wireframe: false,
+  });
+  const knot = new THREE.Mesh(knotGeom, knotMat);
+  scene.add(knot);
+
+  // Wireframe overlay
+  const wireKnot = new THREE.Mesh(knotGeom, new THREE.MeshBasicMaterial({
+    color: '#00d4ff',
+    wireframe: true,
+    transparent: true,
+    opacity: 0.15,
+  }));
+  knot.add(wireKnot);
+
+  // Floating cubes around it
+  const cubes = [];
+  for (let i = 0; i < 6; i++) {
+    const cubeGeom = new THREE.BoxGeometry(0.2, 0.2, 0.2);
+    const cubeMat = new THREE.MeshStandardMaterial({
+      color: '#00d4ff',
+      emissive: '#00d4ff',
+      emissiveIntensity: 0.5,
+      roughness: 0.3,
+    });
+    const cube = new THREE.Mesh(cubeGeom, cubeMat);
+    scene.add(cube);
+    cubes.push({
+      mesh: cube,
+      angle: (i / 6) * Math.PI * 2,
+      radius: 2.2,
+      height: (Math.random() - 0.5) * 2,
+      speed: 0.3 + Math.random() * 0.5,
+    });
+  }
+
+  // Lights
+  scene.add(new THREE.AmbientLight(0xffffff, 0.3));
+  const pLight1 = new THREE.PointLight('#00d4ff', 20, 10);
+  pLight1.position.set(3, 2, 4);
+  scene.add(pLight1);
+  const pLight2 = new THREE.PointLight('#a855f7', 15, 8);
+  pLight2.position.set(-3, -1, 2);
+  scene.add(pLight2);
+
+  // Mouse
+  let mouseX = 0, mouseY = 0, targetMX = 0, targetMY = 0;
+  document.addEventListener('mousemove', (e) => {
+    targetMX = (e.clientX / window.innerWidth) * 2 - 1;
+    targetMY = -(e.clientY / window.innerHeight) * 2 + 1;
+  });
+
+  let time = 0;
+  function animate() {
+    requestAnimationFrame(animate);
+    time += 0.01;
+    mouseX += (targetMX - mouseX) * 0.03;
+    mouseY += (targetMY - mouseY) * 0.03;
+
+    knot.rotation.x += 0.005;
+    knot.rotation.y += 0.008;
+    knot.rotation.z += 0.003;
+
+    cubes.forEach(c => {
+      c.angle += c.speed * 0.01;
+      c.mesh.position.x = Math.cos(c.angle) * c.radius;
+      c.mesh.position.z = Math.sin(c.angle) * c.radius;
+      c.mesh.position.y = c.height + Math.sin(time + c.angle) * 0.5;
+      c.mesh.rotation.x += 0.02;
+      c.mesh.rotation.y += 0.03;
+    });
+
+    camera.position.x += (mouseX * 2 - camera.position.x) * 0.03;
+    camera.position.y += (-mouseY * 1.5 - camera.position.y) * 0.03;
+    camera.lookAt(0, 0, 0);
+
+    renderer.render(scene, camera);
+  }
+
+  const resizeObs = new ResizeObserver(() => {
+    const w = container.clientWidth;
+    const h = container.clientHeight;
+    renderer.setSize(w, h);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+  });
+  resizeObs.observe(container);
+
+  animate();
+</script>

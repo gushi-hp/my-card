@@ -1,0 +1,42 @@
+<div class="skill-orbit-wrap">
+  <canvas id="skill-orbit-canvas"></canvas>
+  <div class="skill-hover-label" id="skill-hover-label"></div>
+</div>
+
+<script>
+  import { initSkillOrbit } from '../lib/three-skill-orbit';
+
+  const canvas = document.getElementById('skill-orbit-canvas');
+  const label = document.getElementById('skill-hover-label');
+
+  canvas.addEventListener('skill-hover', (e) => {
+    if (e.detail) {
+      label.textContent = e.detail.name;
+      label.style.opacity = '1';
+    } else {
+      label.style.opacity = '0';
+    }
+  });
+
+  initSkillOrbit(canvas);
+</script>
+
+<style>
+  .skill-orbit-wrap {
+    position: relative;
+    display: flex;
+    justify-content: center;
+  }
+  .skill-hover-label {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.9rem;
+    color: var(--accent);
+    font-weight: 500;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
+</style>

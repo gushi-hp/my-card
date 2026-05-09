@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import HeroScene from '../components/HeroScene.astro';
+import Typewriter from '../components/Typewriter.astro';
+---
+
+<BaseLayout>
+  <section class="page hero">
+    <HeroScene />
+    <h1>
+      <span class="gradient-text">你好，我是</span><br />
+      <span class="gradient-text">你的名字</span>
+    </h1>
+    <div class="tagline">
+      <Typewriter
+        texts={['热爱前端开发 · 探索 3D 交互', '用代码创造有趣的体验', '追求极致的视觉表达']}
+      />
+    </div>
+    <div class="btn-row">
+      <a href="/projects" class="btn btn-primary">查看作品</a>
+      <a href="/contact" class="btn btn-outline">联系我</a>
+    </div>
+    <div class="hero-scroll-indicator">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <path d="M12 5v14M5 12l7 7 7-7" />
+      </svg>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,13 @@
+---
+interface Props {
+  target: number;
+  suffix?: string;
+  label: string;
+}
+const { target, suffix = '', label } = Astro.props;
+---
+
+<div class="stat-item reveal">
+  <div class="stat-number" data-target={target} data-suffix={suffix}>{target}{suffix}</div>
+  <div class="stat-label">{label}</div>
+</div>

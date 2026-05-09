@@ -1,0 +1,97 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SkillOrbit from '../components/SkillOrbit.astro';
+import StatCounter from '../components/StatCounter.astro';
+---
+
+<BaseLayout>
+  <section class="page section">
+    <div class="container">
+      <div class="page-title reveal">
+        <h2 class="gradient-text">关于我</h2>
+        <p>一名热爱技术与设计的前端开发者</p>
+      </div>
+
+      <!-- Profile -->
+      <div class="about-grid reveal">
+        <div class="about-avatar-wrap">
+          <div class="about-avatar-glow"></div>
+          <img class="about-avatar" src="/images/avatar.jpg" alt="头像" />
+        </div>
+        <div>
+          <h3 style="margin-bottom: 16px;">你好！我是 <span class="gradient-text">你的名字</span></h3>
+          <p style="color: var(--text-dim); line-height: 1.8; font-size: 0.95rem;">
+            一名计算机专业毕业的开发者，专注于前端开发和 3D 交互体验。热爱用 Three.js 和 WebGL 创造引人入胜的视觉效果。
+            工作之余喜欢研究最新的 Web 技术，探索着色器编程，以及用代码实现脑海中的创意画面。<br /><br />
+            我的目标是把每一个项目都当作艺术品来打磨——不仅要功能完善，还要在视觉和交互上让人印象深刻。
+            我相信好的设计能让技术更有温度。
+          </p>
+        </div>
+      </div>
+
+      <!-- 3D Skill Orbit -->
+      <div class="about-skills-section reveal">
+        <h3 style="text-align: center; margin-bottom: 8px;">技 能</h3>
+        <p style="text-align: center; color: var(--text-dim); font-size: 0.85rem; margin-bottom: 16px;">悬停小球查看技能名</p>
+        <SkillOrbit />
+      </div>
+
+      <!-- Skill Bars -->
+      <div class="skill-bars reveal" style="margin-top: 48px;">
+        <div>
+          <div class="skill-bar-label"><span>React / Vue</span><span>90%</span></div>
+          <div class="skill-bar-track"><div class="skill-bar-fill" data-width="90%" style="width: 0"></div></div>
+        </div>
+        <div>
+          <div class="skill-bar-label"><span>Three.js / WebGL</span><span>80%</span></div>
+          <div class="skill-bar-track"><div class="skill-bar-fill" data-width="80%" style="width: 0"></div></div>
+        </div>
+        <div>
+          <div class="skill-bar-label"><span>TypeScript</span><span>88%</span></div>
+          <div class="skill-bar-track"><div class="skill-bar-fill" data-width="88%" style="width: 0"></div></div>
+        </div>
+        <div>
+          <div class="skill-bar-label"><span>Node.js / Python</span><span>75%</span></div>
+          <div class="skill-bar-track"><div class="skill-bar-fill" data-width="75%" style="width: 0"></div></div>
+        </div>
+        <div>
+          <div class="skill-bar-label"><span>CSS / 动效设计</span><span>92%</span></div>
+          <div class="skill-bar-track"><div class="skill-bar-fill" data-width="92%" style="width: 0"></div></div>
+        </div>
+        <div>
+          <div class="skill-bar-label"><span>Figma / 设计工具</span><span>70%</span></div>
+          <div class="skill-bar-track"><div class="skill-bar-fill" data-width="70%" style="width: 0"></div></div>
+        </div>
+      </div>
+
+      <!-- Timeline -->
+      <div class="reveal" style="margin-top: 80px;">
+        <h3 style="text-align: center; margin-bottom: 32px;">经 历</h3>
+        <div class="timeline" style="max-width: 500px; margin: 0 auto;">
+          <div class="timeline-item">
+            <h4>高级前端工程师 @ XX科技</h4>
+            <span class="time">2023 - 至今</span>
+            <p>负责核心产品前端架构设计，引入 Three.js 实现数据可视化 3D 大屏。</p>
+          </div>
+          <div class="timeline-item">
+            <h4>前端开发工程师 @ YY公司</h4>
+            <span class="time">2021 - 2023</span>
+            <p>参与多个 React/TypeScript 中大型项目开发，搭建组件库和设计系统。</p>
+          </div>
+          <div class="timeline-item">
+            <h4>计算机科学 本科</h4>
+            <span class="time">2017 - 2021</span>
+            <p>主修计算机科学与技术，期间开始接触前端开发和 WebGL。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-row reveal">
+        <StatCounter target={5} suffix="+" label="年开发经验" />
+        <StatCounter target={30} suffix="+" label="完成项目" />
+        <StatCounter target={12} suffix="K+" label="GitHub Stars" />
+      </div>
+    </div>
+  </section>
+</BaseLayout>

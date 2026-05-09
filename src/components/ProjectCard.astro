@@ -1,0 +1,52 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  tags: string[];
+  image?: string;
+  link?: string;
+  category: string;
+}
+const { title, description, tags, image, link, category } = Astro.props;
+---
+
+<div class="project-card glass glass-hover" data-category={category}>
+  <div class="project-card-inner">
+    <div class="project-card-img">
+      {image ? <img src={image} alt={title} /> : <div class="placeholder-img">&lt;/&gt;</div>}
+    </div>
+    <h3>{title}</h3>
+    <p>{description}</p>
+    <div class="project-tags">
+      {tags.map(tag => <span class="project-tag">{tag}</span>)}
+    </div>
+  </div>
+</div>
+
+<script>
+  import { initCardTilt } from '../lib/card-tilt';
+  document.querySelectorAll('.project-card:not([data-tilt])').forEach(card => {
+    card.dataset.tilt = '1';
+    initCardTilt(card);
+  });
+</script>
+
+<style>
+  .project-card {
+    position: relative;
+    overflow: hidden;
+  }
+  .project-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(circle at var(--gloss-x, 50%) var(--gloss-y, 50%), rgba(255,255,255,0.06) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 1;
+  }
+  .project-card-inner {
+    position: relative;
+    z-index: 0;
+  }
+</style>

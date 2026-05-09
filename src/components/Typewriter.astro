@@ -1,0 +1,46 @@
+---
+interface Props {
+  texts: string[];
+  speed?: number;
+  deleteSpeed?: number;
+  pauseDuration?: number;
+}
+const { texts, speed = 80, deleteSpeed = 40, pauseDuration = 2000 } = Astro.props;
+---
+
+<span class="typewriter" id="typewriter" data-texts={JSON.stringify(texts)} data-speed={speed} data-delete-speed={deleteSpeed} data-pause-duration={pauseDuration}></span>
+
+<script>
+  (function() {
+    const el = document.getElementById('typewriter');
+    if (!el) return;
+    const phrases = JSON.parse(el.dataset.texts || '[]');
+    if (phrases.length === 0) return;
+    const speed = parseInt(el.dataset.speed, 10) || 80;
+    const deleteSpeed = parseInt(el.dataset.deleteSpeed, 10) || 40;
+    const pauseDuration = parseInt(el.dataset.pauseDuration, 10) || 2000;
+
+    let phraseIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+
+    function type() {
+      const current = phrases[phraseIndex];
+      el.textContent = current.substring(0, charIndex);
+      if (!isDeleting && charIndex < current.length) {
+        charIndex++;
+        setTimeout(type, speed);
+      } else if (!isDeleting && charIndex === current.length) {
+        setTimeout(() => { isDeleting = true; type(); }, pauseDuration);
+      } else if (isDeleting && charIndex > 0) {
+        charIndex--;
+        setTimeout(type, deleteSpeed);
+      } else if (isDeleting && charIndex === 0) {
+        isDeleting = false;
+        phraseIndex = (phraseIndex + 1) % phrases.length;
+        setTimeout(type, 300);
+      }
+    }
+    type();
+  })();
+</script>

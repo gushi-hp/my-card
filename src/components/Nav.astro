@@ -1,0 +1,29 @@
+---
+const currentPath = Astro.url.pathname;
+const links = [
+  { href: '/', label: '首页' },
+  { href: '/about', label: '关于' },
+  { href: '/projects', label: '作品' },
+  { href: '/contact', label: '联系' },
+];
+---
+
+<nav class="nav scrolled">
+  <a href="/" class="nav-logo gradient-text">YOURNAME</a>
+  <ul class="nav-links">
+    {links.map((l) => (
+      <li>
+        <a href={l.href} class={currentPath === l.href ? 'active' : ''}>
+          {l.label}
+          {currentPath === l.href && <span class="nav-dot" aria-hidden="true"></span>}
+        </a>
+      </li>
+    ))}
+  </ul>
+</nav>
+
+<style>
+  .nav-dot {
+    display: none;
+  }
+</style>

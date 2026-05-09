@@ -1,0 +1,134 @@
+---
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import ParticleField from '../components/ParticleField.astro';
+import '../styles/global.css';
+---
+
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>个人独立站</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <div class="custom-cursor" id="custom-cursor"></div>
+  <div class="custom-cursor-dot" id="custom-cursor-dot"></div>
+
+  <ParticleField />
+
+  <Nav />
+
+  <main>
+    <slot />
+  </main>
+
+  <Footer />
+
+  <div class="toast" id="toast"></div>
+</body>
+</html>
+
+<script>
+  import Lenis from 'lenis';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  import gsap from 'gsap';
+  import { setupScrollAnimations } from '../lib/animations';
+
+  // ── Lenis smooth scroll ──
+  const lenis = new Lenis({
+    duration: 1.2,
+    easing: (t) => 1 - Math.pow(1 - t, 3),
+    smoothWheel: true,
+  });
+
+  // Sync Lenis with GSAP ScrollTrigger
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add((time) => {
+    lenis.raf(time * 1000);
+  });
+  gsap.ticker.laggedSmoothing(0);
+
+  // ── Custom cursor ──
+  const cursor = document.getElementById('custom-cursor');
+  const cursorDot = document.getElementById('custom-cursor-dot');
+
+  let mx = 0, my = 0, cx = 0, cy = 0;
+
+  document.addEventListener('mousemove', (e) => {
+    mx = e.clientX;
+    my = e.clientY;
+    cursorDot.style.left = mx + 'px';
+    cursorDot.style.top = my + 'px';
+  });
+
+  function animateCursor() {
+    cx += (mx - cx) * 0.12;
+    cy += (my - cy) * 0.12;
+    cursor.style.left = cx + 'px';
+    cursor.style.top = cy + 'px';
+    requestAnimationFrame(animateCursor);
+  }
+  animateCursor();
+
+  function bindCursorHover(el) {
+    el.addEventListener('mouseenter', () => cursor.classList.add('hovering'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('hovering'));
+  }
+
+  const hoverSelector = 'a, button, .btn, .glass-hover, .filter-tag';
+  document.querySelectorAll(hoverSelector).forEach(bindCursorHover);
+
+  const observer = new MutationObserver(() => {
+    document.querySelectorAll(hoverSelector).forEach(el => {
+      if (!el.dataset.cursorBound) {
+        el.dataset.cursorBound = '1';
+        bindCursorHover(el);
+      }
+    });
+  });
+  observer.observe(document.body, { childList: true, subtree: true });
+
+  // ── Nav scroll effect ──
+  const nav = document.querySelector('.nav');
+  if (nav) {
+    lenis.on('scroll', ({ scroll }) => {
+      nav.classList.toggle('scrolled', scroll > 20);
+    });
+  }
+
+  // ── Toast ──
+  window.showToast = function(msg) {
+    const t = document.getElementById('toast');
+    if (!t) return;
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  };
+
+  // ── Scroll reveal (Intersection Observer) ──
+  const revealObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add('visible');
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+  // ── GSAP ScrollTrigger animations ──
+  setupScrollAnimations();
+
+  // Refresh when page changes
+  document.addEventListener('astro:page-load', () => {
+    document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+    document.querySelectorAll('.skill-bar-fill').forEach(bar => { bar.style.width = '0'; });
+    setTimeout(() => {
+      setupScrollAnimations();
+      ScrollTrigger.refresh();
+    }, 150);
+  });
+</script>
