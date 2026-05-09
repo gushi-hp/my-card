@@ -32,14 +32,20 @@ import ContactScene from '../components/ContactScene.astro';
           </form>
         </div>
 
-        <div class="reveal">
-          <ContactScene />
-          <div class="contact-links">
-            <a href="mailto:2024522177@qq.com" class="contact-link">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13 2 4"/></svg>
-              Email
-            </a>
+        <div class="reveal contact-info-side">
+          <div class="glass" style="padding: 32px; margin-bottom: 24px;">
+            <h3 style="margin-bottom: 20px; font-size: 1.1rem;">联系方式</h3>
+            <div style="display: flex; flex-direction: column; gap: 16px;">
+              <a href="mailto:2024522177@qq.com" style="display: flex; align-items: center; gap: 12px; padding: 14px 18px; background: rgba(255,255,255,0.03); border: 1px solid var(--border-card); border-radius: 10px; transition: border-color 0.3s;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13 2 4"/></svg>
+                <div>
+                  <div style="font-size: 0.8rem; color: var(--text-dim);">邮箱</div>
+                  <div style="font-size: 0.95rem;">2024522177@qq.com</div>
+                </div>
+              </a>
+            </div>
           </div>
+          <ContactScene />
         </div>
       </div>
     </div>
@@ -54,3 +60,13 @@ import ContactScene from '../components/ContactScene.astro';
     document.getElementById('contact-form').reset();
   };
 </script>
+
+<style>
+  .contact-info-side a:hover {
+    border-color: var(--accent) !important;
+    box-shadow: 0 0 20px var(--accent-dim);
+  }
+  .contact-scene-wrap {
+    height: 280px !important;
+  }
+</style>
