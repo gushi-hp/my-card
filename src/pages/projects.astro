@@ -4,39 +4,9 @@ import ProjectCard from '../components/ProjectCard.astro';
 
 const projects = [
   {
-    title: '3D 可视化大屏',
-    description: '基于 Three.js 的数据可视化驾驶舱，支持实时数据流渲染、模型交互、多视角切换。',
-    tags: ['Three.js', 'React', 'WebSocket'],
-    category: '3d',
-  },
-  {
-    title: '个人独立站',
-    description: 'Astro + Three.js 构建的科技风个人网站，3D 粒子背景、线框几何体、GSAP 流畅动画。',
-    tags: ['Astro', 'Three.js', 'GSAP'],
-    category: 'frontend',
-  },
-  {
-    title: '组件库设计系统',
-    description: '企业级 React 组件库，包含 50+ 组件，完善的文档和 Storybook，支持主题定制。',
-    tags: ['React', 'TypeScript', 'Storybook'],
-    category: 'frontend',
-  },
-  {
-    title: '着色器艺术探索',
-    description: '用 GLSL 片段着色器创作的视觉艺术作品集，包含光线步进、分形、粒子系统。',
-    tags: ['GLSL', 'WebGL', 'Shader'],
-    category: '3d',
-  },
-  {
-    title: '全栈博客平台',
-    description: '支持 Markdown 编辑、标签分类、评论系统的个人博客，SSR 渲染优化 SEO。',
-    tags: ['Node.js', 'PostgreSQL', 'Vue'],
-    category: 'fullstack',
-  },
-  {
-    title: 'AI 图片生成工具',
-    description: '接入 Stable Diffusion API，实现文生图、图生图，支持 prompt 模板和批量生成。',
-    tags: ['Python', 'FastAPI', 'AI'],
+    title: '植安答园林',
+    description: '基于 AI 技术的园林知识问答工具，帮助园林从业者和爱好者快速获取专业知识。',
+    tags: ['AI', '小程序', '前端'],
     category: 'fullstack',
   },
 ];
@@ -47,19 +17,10 @@ const projects = [
     <div class="container">
       <div class="page-title reveal">
         <h2 class="gradient-text">作品集</h2>
-        <p>一些我最近完成的项目</p>
+        <p>用 AI 创造有价值的工具</p>
       </div>
 
-      <!-- Filter -->
-      <div class="filter-bar reveal">
-        <button class="filter-tag active" data-filter="all">全部</button>
-        <button class="filter-tag" data-filter="frontend">前端</button>
-        <button class="filter-tag" data-filter="3d">3D / WebGL</button>
-        <button class="filter-tag" data-filter="fullstack">全栈 / 其他</button>
-      </div>
-
-      <!-- Grid -->
-      <div class="project-grid">
+      <div class="project-grid" style="max-width: 500px; margin: 0 auto;">
         {projects.map((p) => (
           <ProjectCard {...p} />
         ))}
@@ -67,37 +28,6 @@ const projects = [
     </div>
   </section>
 </BaseLayout>
-
-<script>
-  // Filter logic
-  const filterTags = document.querySelectorAll('.filter-tag');
-  const cards = document.querySelectorAll('.project-card');
-
-  filterTags.forEach(tag => {
-    tag.addEventListener('click', () => {
-      filterTags.forEach(t => t.classList.remove('active'));
-      tag.classList.add('active');
-
-      const filter = tag.dataset.filter;
-      cards.forEach(card => {
-        const match = filter === 'all' || card.dataset.category === filter;
-        if (match) {
-          card.style.display = '';
-          card.offsetHeight; // force reflow
-          card.style.opacity = '1';
-          card.style.transform = 'scale(1)';
-        } else {
-          card.style.opacity = '0';
-          card.style.transform = 'scale(0.9)';
-          card.addEventListener('transitionend', function hide() {
-            card.style.display = 'none';
-            card.removeEventListener('transitionend', hide);
-          });
-        }
-      });
-    });
-  });
-</script>
 
 <style>
   .project-card {

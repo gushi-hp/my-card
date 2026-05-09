@@ -76,64 +76,6 @@ export function initParticleField(canvas) {
   const particles = new THREE.Points(geometry, material);
   scene.add(particles);
 
-  // Line connections
-  const lineGeometry = new THREE.BufferGeometry();
-  const linePositions = [];
-  const lineColors = [];
-  const MAX_LINES = 300;
-  const MAX_DIST = 8;
-
-  const lineMaterial = new THREE.LineBasicMaterial({
-    vertexColors: true,
-    blending: THREE.AdditiveBlending,
-    depthWrite: false,
-    transparent: true,
-    opacity: 0.3,
-  });
-
-  let linesMesh = new THREE.LineSegments(lineGeometry, lineMaterial);
-  scene.add(linesMesh);
-
-  function updateLines() {
-    linePositions.length = 0;
-    lineColors.length = 0;
-    let lineCount = 0;
-
-    const pos = geometry.attributes.position.array;
-    const col = geometry.attributes.color.array;
-
-    for (let i = 0; i < COUNT && lineCount < MAX_LINES; i++) {
-      for (let j = i + 1; j < COUNT && lineCount < MAX_LINES; j++) {
-        const i3 = i * 3, j3 = j * 3;
-        const dx = pos[i3] - pos[j3];
-        const dy = pos[i3 + 1] - pos[j3 + 1];
-        const dz = pos[i3 + 2] - pos[j3 + 2];
-        const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
-
-        if (dist < MAX_DIST) {
-          linePositions.push(pos[i3], pos[i3 + 1], pos[i3 + 2]);
-          linePositions.push(pos[j3], pos[j3 + 1], pos[j3 + 2]);
-
-          // Use particle colors for line endpoints
-          const alpha = 1 - dist / MAX_DIST;
-          lineColors.push(col[i3] * alpha, col[i3 + 1] * alpha, col[i3 + 2] * alpha);
-          lineColors.push(col[j3] * alpha, col[j3 + 1] * alpha, col[j3 + 2] * alpha);
-
-          lineCount++;
-        }
-      }
-    }
-
-    if (lineCount > 0) {
-      scene.remove(linesMesh);
-      const lg = new THREE.BufferGeometry();
-      lg.setAttribute('position', new THREE.Float32BufferAttribute(linePositions, 3));
-      lg.setAttribute('color', new THREE.Float32BufferAttribute(lineColors, 3));
-      linesMesh = new THREE.LineSegments(lg, lineMaterial);
-      scene.add(linesMesh);
-    }
-  }
-
   // Mouse tracking
   let mouseX = 0, mouseY = 0;
   let targetMouseX = 0, targetMouseY = 0;
@@ -167,11 +109,6 @@ export function initParticleField(canvas) {
     particles.rotation.y += 0.0002;
     particles.rotation.x += mouseY * 0.001;
 
-    // Update lines every 15 frames
-    if (Math.floor(time * 1000) % 250 < 5) {
-      updateLines();
-    }
-
     renderer.render(scene, camera);
   }
 
@@ -182,6 +119,5 @@ export function initParticleField(canvas) {
     camera.updateProjectionMatrix();
   });
 
-  updateLines();
   animate();
 }
